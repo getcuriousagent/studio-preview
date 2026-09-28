@@ -64,3 +64,11 @@ button:focus-visible { outline: 3px solid var(--warm); outline-offset: 2px; }
   display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
 }
 .note p { margin: 0; flex: 1 1 220px; }
+.opening { border-top: 2px solid var(--ink); padding-top: 14px; font-size: 0.95rem; }
+.opening h3 {
+  font-family: var(--label); font-weight: 500; text-transform: uppercase;
+  letter-spacing: 0.22em; font-size: 0.8rem; color: var(--accent); margin: 0 0 8px;
+}
+.opening p { margin: 0 0 8px; }
+.opening .address { font-weight: 600; overflow-wrap: anywhere; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+button.small { padding: 8px 14px; min-height: 36px; font-size: 0.9rem; }

@@ -124,6 +124,56 @@ const Studio = (() => {
     if (!$("ready").hidden) $("install").hidden = false;
   });
 
+  // Which system the page is on, for the install and bookmark steps.
+  function system() {
+    const p = ((navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "").toLowerCase();
+    const ua = navigator.userAgent.toLowerCase();
+    if (ua.includes("android")) return "android";
+    if (/iphone|ipad|ipod/.test(ua) || (p.includes("mac") && navigator.maxTouchPoints > 1)) return "ios";
+    if (p.includes("mac")) return "mac";
+    if (p.includes("win")) return "windows";
+    if (p.includes("cros") || p.includes("chrome os") || ua.includes("cros")) return "chromeos";
+    return "other";
+  }
+  const INSTALLED = {
+    mac: "Find it in Launchpad or your Applications folder. To keep it in your Dock: while it is open, right-click its icon in the Dock, then choose Options, then Keep in Dock.",
+    windows: "Find it in the Start menu. To keep it on your taskbar: while it is open, right-click its icon on the taskbar, then choose Pin to taskbar.",
+    chromeos: "Find it in your launcher. To keep it on your shelf: while it is open, right-click its icon on the shelf, then choose Pin.",
+    android: "It is on your home screen and with your other apps.",
+    other: "Find it with your other applications.",
+  };
+  const BOOKMARK = {
+    mac: "To bookmark it, press ⌘D.",
+    windows: "To bookmark it, press Ctrl+D.",
+    chromeos: "To bookmark it, press Ctrl+D.",
+    other: "To bookmark it, press Ctrl+D.",
+    android: "To keep it on your home screen, use your browser's menu: Add to Home screen.",
+    ios: "To keep it on your home screen, tap Share, then Add to Home Screen.",
+  };
+  const inApp = () => matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+
+  window.addEventListener("appinstalled", () => {
+    installPrompt = null;
+    $("install").hidden = true;
+    $("installed-text").textContent = INSTALLED[system()] || INSTALLED.other;
+    $("installed").hidden = false;
+  });
+
+  // How to get back here, always shown once the Studio is open: the page
+  // cannot tell whether it was installed earlier, or on another device.
+  function describeOpening() {
+    $("opening-address").textContent = location.host;
+    if (inApp()) {
+      $("opening-text").textContent = "This is your Studio's app. It also opens in any browser, at:";
+      $("opening-hint").textContent = "";
+    } else {
+      $("opening-text").textContent = "From its app icon, if you installed it, or in any browser at:";
+      $("opening-hint").textContent = BOOKMARK[system()] || BOOKMARK.other;
+    }
+    if (!(navigator.clipboard && navigator.clipboard.writeText)) $("opening-copy").hidden = true;
+    $("opening").hidden = false;
+  }
+
   function offerHomeScreen() {
     const iPhone = navigator.standalone === false && navigator.maxTouchPoints > 1;
     let dismissed = false;
@@ -149,6 +199,15 @@ const Studio = (() => {
       installPrompt = null;
       $("install").hidden = true;
     });
+    $("installed-close").addEventListener("click", () => { $("installed").hidden = true; });
+    $("opening-copy").addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(location.origin);
+        $("opening-copy").textContent = "Copied";
+      } catch (e) {
+        $("opening-copy").textContent = "Could not copy";
+      }
+    });
 
     let status;
     try {
@@ -167,6 +226,7 @@ const Studio = (() => {
     }
     show("ready");
     offerHomeScreen();
+    describeOpening();
   }
 
   document.addEventListener("DOMContentLoaded", start);

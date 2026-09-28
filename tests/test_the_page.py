@@ -86,6 +86,18 @@ class ThePage(unittest.TestCase):
         self.assertIn('"Keep your Studio in its own window, with an icon in your Dock or taskbar."', self.js)
         self.assertIn('$("install-text").textContent = COMPUTER_INSTALL', self.js)
 
+    def test_after_installing_it_says_where_the_app_is_and_how_to_keep_it(self):
+        self.assertIn('window.addEventListener("appinstalled"', self.js)
+        for words in ("Keep in Dock", "Pin to taskbar", "on your home screen and with your other apps"):
+            self.assertIn(words, self.js)
+
+    def test_how_to_open_it_again_is_always_said_once_open(self):
+        self.assertIn('<h3 id="opening-h">Opening your Studio</h3>', self.html)
+        self.assertRegex(self.html, r'<footer id="opening"[^>]*hidden')
+        self.assertIn('show("ready");\n    offerHomeScreen();\n    describeOpening();', self.js)
+        for words in ("press ⌘D", "press Ctrl+D", "tap Share, then Add to Home Screen"):
+            self.assertIn(words, self.js)
+
     def test_it_starts_by_checking_and_shows_nothing_else(self):
         visible = re.findall(r'<section id="([a-z-]+)"(?![^>]*hidden)', self.html)
         self.assertEqual(visible, ["checking"])
