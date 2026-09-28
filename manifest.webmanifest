@@ -1,6 +1,6 @@
 {
   "name": "Curious Agent Studio",
-  "short_name": "Studio",
+  "short_name": "Curious Agent Studio",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f6f4f1",

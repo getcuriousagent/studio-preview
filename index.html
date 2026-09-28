@@ -3,12 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; connect-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'">
 <title>Curious Agent Studio</title>
-<link rel="manifest" href="/manifest.webmanifest">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest" crossorigin="use-credentials">
+<!-- The icon is inside the page because a phone fetches a linked icon without the sign-in, and the lock refuses it. -->
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAC/klEQVR42u3dsW3CUBCAYZahoKNPR4sUWk/ghg2QWAAxQbZgB4pIaVGaSBReBFbwWRw5299Jf+fi2frKp/OiPX89pMqttk3vFj6YgJaAloCWgBbQEtAS0BLQAhpoAS3NDPTucNKAPvbH0fX9+xcq6xxAAw000EADLaCBBhpooIEGGmiggQYaaKAFNNBAAw000EADDembQC83n70DGmiggQYaaKCBBhpooIEGGmiggQYaaKCBBhpooIEGGmiggQa6BNLIVIKX1eX6kxLQQAMNNNBAAw000EADDTTQQAMNNNBAAw000EADDTTQQAMNNNBpkCITuecQvesQKXKGKLzoO2YENNBAAw000EADDTTQQAMNNNBAAw000EADDTTQQAMNNNBAAw000EBPax9GlamwlyMTtL0cQAMNNNBAAw000EADDTTQQAMNNNBAAw000EADDTTQQAMN9ARBzwHplPFH74kADTTQQAMNNNBAAw000EADDTTQQAMNNNBAAw000EADDTTQQI8ENKDD53bvUqqCH2iggQYaaKCBBhpooIEGGmiggQYaaKCBBhpooIEGGmiggQb6H0GDVwtopSI21k3bO6CBBhpooIEGGmiggQYaaKCBBhpooIEGGmiggQYaaKCBBhpooIEG+jWgs3Y6QDq8yHfODGiggQYaaKCBBhpooIEGGmiggQYaaKCBBhpooIEGGmiggQZ6gqCr/JIC0mHoMgMaaKCBBhpooIEGGmiggQYaaKCBBhpooIEGGmiggQYaaKCBBjoUpPUCGmiggQYaaKCBBhpooIEGGmiggQYaaKCBBhpooIEGGmiggQa6BP4qKwGABhpooIEGGmiggQYaaKCBBhpooIEGGmiggQYaaKCBBhpooIEGGWigge4gBRpoAQ000EADDbSABhpooIEGGmiggQYaaKCBBhpooIEGGuixBzTQQAtooIEGGmigBTTQQAMNNNBAAw000EADDbSABhpooNNARx6Wqge0gJaAloCWgBbQEtAS0BLQEtCaY08TQcoCBl7mwAAAAABJRU5ErkJggg==">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Studio">
+<meta name="apple-mobile-web-app-title" content="Curious Agent Studio">
 <style>
   :root { --bg:#f6f4f1; --ink:#1d1b19; --muted:#6b645c; --line:#dcd6ce; --ok:#2e7d4f; --bad:#b23a3a; color-scheme: light; }
   @media (prefers-color-scheme: dark) { :root { --bg:#171513; --ink:#ece7e1; --muted:#a39a90; --line:#35302b; --ok:#7fcf9e; --bad:#ef8f8f; color-scheme: dark; } }
