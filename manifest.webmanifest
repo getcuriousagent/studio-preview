@@ -1,0 +1,11 @@
+{
+  "name": "Curious Agent Studio",
+  "short_name": "Studio",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f6f4f1",
+  "theme_color": "#f6f4f1",
+  "icons": [
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
