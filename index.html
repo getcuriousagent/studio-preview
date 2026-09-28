@@ -3,7 +3,6 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'">
 <title>Curious Agent Studio</title>
 <link rel="manifest" href="/manifest.webmanifest" crossorigin="use-credentials">
 <!-- The icon is inside the page because a phone fetches a linked icon without the sign-in, and the lock refuses it. -->
@@ -11,85 +10,53 @@
 <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAACoUlEQVR42mPwa53u2zLNp3mqd9Nk78ZJXg0TPesmeNT2u9f0uVX3ulZ1u1R2OVd0Opd3OJW1O5a2OZS02hc32xU12RY02uQ3WOfVW+fWWeXUWmZXW2RVmWdWmmVUmKaXm6SVGaeWGqWUMNDUdKOkIgaamm6YWMhAkukB9X3+db3Em26QUMBAktvn7Tgwb/t+4k3Xj89nIN70oIb+bz9+AlFAbQ+RpuvF5TEQH+5Hr978DwZHLt8g0nTd2FwGIk2ftG7HfyTQv3oLMabrxOQwEGN67uQFf/7+RbYAyM3om0XQdO3oLAaCpke3Tfnw5et/DPD+85eQum78pmtFZTIQNP3tp8//cYA3Hz8F1XTiMV0rMoOBbNOhdnz4FFjVjst0zYh0BjzhjjVksIZVcvtkrKZrhKcx4EozaLGKH/z587dzyVpM09VDUxkwcxM8vZMKDpy77JRThWy6WkgKA3I5AywJgBn1PwXg6/cfU1ZvtkkrgZiuGpzEAHc7sBQDljMELbj85BUedPruk9q5K8yTCyGmqwQlMqCVwMByBlgSkGfBgl2HrZDcDjRdOTCBAWv5DiwJcEUyVqMvPHpRPHUBPNzhpisFxDPgqj2AJQEw/RFjwbGbD4KrO7CaruQfx4Cn9gCWBMC8it+Cw9fvOedW4zJd0S+WAX/tASwJgHkVlwUETVfwjWEgWDcBSwLksEIOGYKmy/tEMRBTNwFLAmBeRbYAGKt4wh1uupx3JAORdROwJEC2AFeaQTNd1iuCgciaD1jOAEsCiAXA9E6k6TKe4QxEmg4sxYDlDLAkAOZVzNyEy3Rp9zAGIk2HlJHAcgZYEhBvupRbKAPxpgPLSGAphlzOEDRdyjWEgXjTiQ93uOmSLkEMNDVdwjmQgaamizsFAAAlqe3gdaVvWwAAAABJRU5ErkJggg==">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Curious Agent Studio">
-<style>
-  :root { --bg:#f6f4f1; --ink:#1d1b19; --muted:#6b645c; --line:#dcd6ce; --ok:#2e7d4f; --bad:#b23a3a; color-scheme: light; }
-  @media (prefers-color-scheme: dark) { :root { --bg:#171513; --ink:#ece7e1; --muted:#a39a90; --line:#35302b; --ok:#7fcf9e; --bad:#ef8f8f; color-scheme: dark; } }
-  * { box-sizing: border-box; }
-  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
-         padding: calc(24px + env(safe-area-inset-top)) 16px calc(40px + env(safe-area-inset-bottom)); }
-  main { max-width: 560px; margin: 0 auto; display:flex; flex-direction:column; gap:24px; }
-  h1 { font-size:1.6rem; margin:0; }
-  .muted { color:var(--muted); font-size:.92rem; margin:0; }
-  section { border-top:1px solid var(--line); padding-top:16px; display:flex; flex-direction:column; gap:10px; }
-  h2 { font-size:1rem; margin:0; }
-  dl { display:grid; grid-template-columns: auto 1fr; gap:6px 16px; margin:0; }
-  dt { color:var(--muted); } dd { margin:0; font-variant-numeric: tabular-nums; }
-  .buttons { display:flex; flex-wrap:wrap; gap:8px; }
-  button { font:inherit; padding:8px 14px; border-radius:8px; border:1px solid var(--line); background:transparent; color:var(--ink); cursor:pointer; }
-  button:focus-visible { outline:2px solid var(--ink); outline-offset:2px; }
-  .ok { color:var(--ok); } .bad { color:var(--bad); }
-  pre { margin:0; white-space:pre-wrap; font-size:.9rem; }
-</style>
+<meta name="theme-color" content="#fbfdfa">
+<link rel="stylesheet" href="/studio.css">
+<script src="/studio.js" defer></script>
 </head>
 <body>
+<header class="masthead">
+  <p class="kicker">Curious Agent</p>
+  <h1>Studio</h1>
+</header>
 <main>
-  <header>
-    <h1>Curious Agent Studio</h1>
-    <p class="muted">A first test. It reads one agent's settings from GitHub and changes nothing.</p>
-  </header>
-
-  <section aria-labelledby="agent-h">
-    <h2 id="agent-h">Agent</h2>
-    <p id="agent-status" class="muted">Reading the profile…</p>
-    <dl id="agent-settings" hidden></dl>
+  <section id="checking">
+    <p class="quiet">Checking…</p>
   </section>
 
-  <section aria-labelledby="wait-h">
-    <h2 id="wait-h">How long can one request run?</h2>
-    <p class="muted">Each button asks the server to wait that long. The longest that comes back is the limit on this plan.</p>
-    <div class="buttons">
-      <button type="button" data-s="10">10 s</button>
-      <button type="button" data-s="30">30 s</button>
-      <button type="button" data-s="60">60 s</button>
-      <button type="button" data-s="120">120 s</button>
-      <button type="button" data-s="300">300 s</button>
-    </div>
-    <pre id="wait-log" aria-live="polite"></pre>
+  <section id="private" hidden aria-labelledby="private-h">
+    <h2 id="private-h">Keep your agent private</h2>
+    <p>Your Studio is open to anyone who has its address. Lock it so only you can open it:</p>
+    <ol class="steps">
+      <li>In Vercel, open your project's <strong>Settings</strong>.</li>
+      <li>Choose <strong>Deployment Protection</strong>.</li>
+      <li>Under <strong>Vercel Authentication</strong>, turn on <strong>Require Log In</strong> and choose <strong>All Deployments</strong>.</li>
+      <li>Click <strong>Save</strong>, then come back here.</li>
+    </ol>
+    <p id="still-open" class="warn" hidden>It is still open to anyone. Check the steps above, then try again.</p>
+    <button type="button" id="check-again" class="primary">Check again</button>
   </section>
+
+  <section id="signin" hidden>
+    <p id="signin-text" class="quiet"></p>
+  </section>
+
+  <section id="ready" hidden aria-labelledby="ready-h">
+    <h2 id="ready-h">Your Studio is private</h2>
+    <p>Only you can open it.</p>
+    <p id="github-line"></p>
+    <p class="quiet">Setting up your first agent comes next.</p>
+  </section>
+
+  <aside id="home-screen" class="note" hidden>
+    <p>Keep your Studio a tap away: tap <strong>Share</strong>, then <strong>Add to Home Screen</strong>.</p>
+    <button type="button" id="home-screen-close" class="plain" aria-label="Dismiss">Not now</button>
+  </aside>
+
+  <aside id="install" class="note" hidden>
+    <p>Keep your Studio a tap away, on your home screen.</p>
+    <button type="button" id="install-button" class="primary">Install</button>
+  </aside>
 </main>
-<script>
-const LABELS = {agent_name:"Name", model_name:"Model", monthly_limit:"Monthly limit ($)", dress_rehearsal:"Dress rehearsal"};
-
-fetch("/api/profile", {cache:"no-store"})
-  .then(r => r.json().then(body => ({ok:r.ok, body})))
-  .then(({ok, body}) => {
-    const status = document.getElementById("agent-status");
-    if (!ok) { status.textContent = body.error || "Something went wrong."; status.className = "bad"; return; }
-    status.textContent = "Read from " + body.repository + ".";
-    status.className = "ok";
-    const dl = document.getElementById("agent-settings");
-    for (const [k, v] of Object.entries(body.settings)) {
-      const dt = document.createElement("dt"); dt.textContent = LABELS[k] || k;
-      const dd = document.createElement("dd"); dd.textContent = v == null ? "(not set)" : v;
-      dl.append(dt, dd);
-    }
-    dl.hidden = false;
-  })
-  .catch(() => {
-    const status = document.getElementById("agent-status");
-    status.textContent = "Could not reach the server function.";
-    status.className = "bad";
-  });
-
-const log = document.getElementById("wait-log");
-document.querySelectorAll("button[data-s]").forEach(b => b.addEventListener("click", () => {
-  const s = b.dataset.s, t0 = performance.now();
-  log.textContent += `Asked for ${s} s… `;
-  fetch("/api/wait?seconds=" + s, {cache:"no-store"})
-    .then(r => r.ok ? r.json() : Promise.reject(r.status))
-    .then(body => { log.textContent += `came back after ${body.waited} s.\n`; })
-    .catch(code => { log.textContent += `stopped after ${((performance.now()-t0)/1000).toFixed(1)} s (${code}).\n`; });
-}));
-</script>
 </body>
 </html>
