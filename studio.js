@@ -60,9 +60,16 @@ const Studio = (() => {
       throw new Stopped();
     }
     const json = (response.headers.get("Content-Type") || "").startsWith("application/json");
-    if (response.type === "opaqueredirect" || response.status === 0 || !json) {
+    if (response.type === "opaqueredirect" || response.status === 0 || (!json && response.status < 400)) {
       signInAgain();
       throw new Stopped();
+    }
+    // Vercel's own failures (a function that crashed, or ran past its time)
+    // are not JSON. They are not a lapsed sign-in, and reloading would lose
+    // the page's work, so say what happened instead.
+    if (!json) {
+      return { ok: false, status: response.status,
+        body: { error: "The Studio's server did not answer properly (" + response.status + "). Try again in a minute." } };
     }
     const body = await response.json().catch(() => ({}));
     if (response.status === 423 || body.locked === false) {
@@ -89,7 +96,8 @@ const Studio = (() => {
       sodium = loadScript("/vendor/libsodium.js")
         .then(() => loadScript("/vendor/libsodium-wrappers.js"))
         .then(() => window.sodium.ready)
-        .then(() => window.sodium);
+        .then(() => window.sodium)
+        .catch((e) => { sodium = null; throw e; });  // try again next time
     }
     return sodium;
   }
