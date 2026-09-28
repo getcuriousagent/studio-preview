@@ -81,6 +81,11 @@ class ThePage(unittest.TestCase):
         ):
             self.assertIn(line, text)
 
+    def test_the_install_offer_says_home_screen_on_a_phone_and_window_on_a_computer(self):
+        self.assertIn('<p id="install-text">Keep your Studio a tap away, on your home screen.</p>', self.html)
+        self.assertIn('"Keep your Studio in its own window, with an icon in your Dock or taskbar."', self.js)
+        self.assertIn('$("install-text").textContent = COMPUTER_INSTALL', self.js)
+
     def test_it_starts_by_checking_and_shows_nothing_else(self):
         visible = re.findall(r'<section id="([a-z-]+)"(?![^>]*hidden)', self.html)
         self.assertEqual(visible, ["checking"])

@@ -111,7 +111,12 @@ const Studio = (() => {
   }
 
   // Add to Home Screen. iPhone Safari has no prompt of its own, so it gets
-  // a note; Android offers one, which gets a button.
+  // a note; Chrome, Brave and Edge offer one, which gets a button. On a
+  // computer, installing gives the Studio its own window rather than a
+  // home-screen icon, and the button says so.
+  const COMPUTER_INSTALL = "Keep your Studio in its own window, with an icon in your Dock or taskbar.";
+  const onPhone = () => Boolean((navigator.userAgentData && navigator.userAgentData.mobile)
+    || matchMedia("(pointer: coarse)").matches);
   let installPrompt = null;
   window.addEventListener("beforeinstallprompt", (e) => {
     e.preventDefault();
@@ -124,6 +129,7 @@ const Studio = (() => {
     let dismissed = false;
     try { dismissed = localStorage.getItem(HOME_SCREEN_DISMISSED) === "1"; } catch (e) { /* private mode */ }
     if (iPhone && !dismissed) $("home-screen").hidden = false;
+    if (!onPhone()) $("install-text").textContent = COMPUTER_INSTALL;
     if (installPrompt) $("install").hidden = false;
   }
 
